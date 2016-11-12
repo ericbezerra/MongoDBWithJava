@@ -26,7 +26,7 @@ public class PacienteDao {
 
 	
 	//##  Insere no banco  ##//
-	public void create(Paciente paciente) {
+	public void insert(Paciente paciente) {
 		this.paciente = paciente;
         query.put("nome",paciente.getNome());
         query.put("sexo",paciente.getSexo());
@@ -35,13 +35,14 @@ public class PacienteDao {
 	}
 
 	//##  Lista todos do banco  ##//
-	public ArrayList<Paciente> read() {
+	public ArrayList<Paciente> find() {
             ArrayList<Paciente> list = new ArrayList<>();
             collection = connection.getDb().getCollection("paciente");
             DBCursor cursor = collection.find();
             while (cursor.hasNext()) {
                 BasicDBObject pacientes = (BasicDBObject) cursor.next();
                 Paciente p = new Paciente();
+                p.setId(pacientes.getString("_id"));
                 p.setNome(pacientes.getString("nome"));
                 p.setSexo(pacientes.getString("sexo"));
                 p.setIdade(pacientes.getInt("idade"));
@@ -68,17 +69,15 @@ public class PacienteDao {
 	}
 
 	//##  Remove do banco  ##//
-	public void remove(Paciente paciente) {
+	public void delete(Paciente paciente) {
 		this.paciente = paciente;
         query.put("nome", paciente.getNome());
+        query.append("sexo", paciente.getSexo());
+        query.append("idade", paciente.getIdade());
         collection.remove(query);
 	}
 
 	//##  Lista pelo id do banco  ##//
-	public Paciente  readById(Integer id) {
-            return this.paciente;
-	}
-        
         public Paciente findDocumentById(String id) {
             BasicDBObject query = new BasicDBObject();
             query.put("_id", new ObjectId(id));

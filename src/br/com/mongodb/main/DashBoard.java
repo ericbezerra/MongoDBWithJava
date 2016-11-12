@@ -12,6 +12,7 @@ import br.com.mongodb.view.AdicionaConsulta;
 import br.com.mongodb.dao.ConsultaDao;
 import br.com.mongodb.dao.MedicoDao;
 import br.com.mongodb.dao.PacienteDao;
+import br.com.mongodb.model.Consulta;
 import br.com.mongodb.view.EditaConsulta;
 import br.com.mongodb.view.EditaMedico;
 import br.com.mongodb.view.EditaPaciente;
@@ -23,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author eric.bezerra
  */
-public class DashBoard extends javax.swing.JFrame {
+public final class DashBoard extends javax.swing.JFrame {
     DefaultTableModel modelo;
     /**
      * Creates new form DashBoard
@@ -37,21 +38,23 @@ public class DashBoard extends javax.swing.JFrame {
     }
     
     public void populaTabelaConsulta(){
-        ConsultaDao cd = new ConsultaDao();
+        ConsultaDao cdao = new ConsultaDao();
+        MedicoDao mdao = new MedicoDao();
+        PacienteDao pdao = new PacienteDao();
         
         Object [] consultaColuna = 
             {"Data","Hora", "Medico", "Paciente", "Excluir", "Alterar"};
         
         int colums = consultaColuna.length;
-        int rows = cd.read().size();
+        int rows = cdao.find().size();
         
         Object[][] dados = new Object[rows][colums];
         
         for(int i = 0; i < rows; i++){ 
-            dados[i][0] = cd.read().get(i).getData();
-            dados[i][1] = cd.read().get(i).getHora();
-            dados[i][2] = cd.read().get(i).getMedico();
-            dados[i][3] = cd.read().get(i).getPaciente();
+            dados[i][0] = cdao.find().get(i).getData();
+            dados[i][1] = cdao.find().get(i).getHora();
+            dados[i][2] = mdao.findDocumentById(cdao.find().get(i).getMedicoId()).getNome();
+            dados[i][3] = pdao.findDocumentById(cdao.find().get(i).getPacienteId()).getNome();
         }
         modelo = (DefaultTableModel)tabelaConsulta.getModel();
         
@@ -65,13 +68,13 @@ public class DashBoard extends javax.swing.JFrame {
         Object [] pacienteColuna = 
             {"Nome","Sexo", "Idade"};
         int colums = pacienteColuna.length;
-        int rows = pd.read().size();
+        int rows = pd.find().size();
          Object[][] dados = new Object[rows][colums];
         
         for(int i = 0; i < rows; i++){ 
-            dados[i][0] = pd.read().get(i).getNome();
-            dados[i][1] = pd.read().get(i).getSexo();
-            dados[i][2] = pd.read().get(i).getIdade();
+            dados[i][0] = pd.find().get(i).getNome();
+            dados[i][1] = pd.find().get(i).getSexo();
+            dados[i][2] = pd.find().get(i).getIdade();
         }
         modelo = (DefaultTableModel)tabelaPaciente.getModel();
         
@@ -85,12 +88,12 @@ public class DashBoard extends javax.swing.JFrame {
         Object [] medicoColuna = 
             {"Nome","Especialidade"};
         int colums = medicoColuna.length;
-        int rows = md.read().size();
+        int rows = md.find().size();
         Object[][] dados = new Object[rows][colums];
         
         for(int i = 0; i < rows; i++){
-            dados[i][0] = md.read().get(i).getNome();
-            dados[i][1] = md.read().get(i).getEspecialidade();
+            dados[i][0] = md.find().get(i).getNome();
+            dados[i][1] = md.find().get(i).getEspecialidade();
         }
         
         modelo = (DefaultTableModel)tabelaMedico.getModel();
@@ -432,6 +435,14 @@ public class DashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Consulta c = new Consulta();
+        ConsultaDao cdao = new ConsultaDao();
+        
+        c.setData(tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 0).toString());
+        c.setHora(tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 1).toString());
+        
+        System.out.println(c);
+        cdao.delete(c);
         System.out.println("Excluir Consulta");
     }//GEN-LAST:event_jButton3ActionPerformed
 

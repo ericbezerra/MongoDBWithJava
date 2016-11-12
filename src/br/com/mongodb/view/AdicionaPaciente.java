@@ -256,7 +256,7 @@ public class AdicionaPaciente extends javax.swing.JFrame {
         if((paciente.getNome().equalsIgnoreCase(""))){
             JOptionPane.showMessageDialog(null, "Digite o nome do Paciente!");
         }else{
-            dao.create(paciente);
+            dao.insert(paciente);
         
             JOptionPane.showMessageDialog(null, "Paciente adicionado com sucesso!");
             int opt = JOptionPane.showConfirmDialog(this, "Adicionar mais um Paciente?","Paciente Adicionado", JOptionPane.YES_NO_OPTION);

@@ -12,6 +12,9 @@ import br.com.mongodb.main.DashBoard;
 import br.com.mongodb.util.Menssagem;
 import br.com.mongodb.main.Start;
 import br.com.mongodb.model.Consulta;
+import br.com.mongodb.model.Medico;
+import br.com.mongodb.model.Paciente;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -21,46 +24,57 @@ import javax.swing.JOptionPane;
  */
 public class AdicionaConsulta extends javax.swing.JFrame {
 
+    private MedicoDao mdao;
+    private PacienteDao pdao;
+    private ConsultaDao cdao;
+    private Medico medico;
+    private ArrayList<Medico> mlist;
+    private Paciente paciente;
+    private ArrayList<Paciente> plist;
+    private Consulta consulta;
+
     /**
      * Creates new form AdicionaEditaConsulta
      */
     public AdicionaConsulta() {
         initComponents();
         this.setLocationRelativeTo(null);
+        mdao = new MedicoDao();
+        pdao = new PacienteDao();
+        mlist = mdao.find();
+        plist = pdao.find();
         populaComboBox();
     }
-    
-    public void populaComboBox(){
-        MedicoDao mdao = new MedicoDao();
-        PacienteDao pdao = new PacienteDao();
+
+    public void populaComboBox() {
         
-        int medicoQtd = mdao.read().size();
-        int pacienteQtd = pdao.read().size();
-        
+
+        int medicoQtd = mdao.find().size();
+        int pacienteQtd = pdao.find().size();
+
         String[] medicos = new String[medicoQtd];
         String[] pacientes = new String[pacienteQtd];
-        
-        if((medicos.length != 0) && (pacientes.length != 0)){
-            
-            for(int i = 0; i < medicos.length; i++){
-                cbMedico.addItem(mdao.read().get(i).getNome()); 
+
+        if ((medicos.length != 0) && (pacientes.length != 0)) {
+
+            for (int i = 0; i < medicos.length; i++) {
+                cbMedico.addItem(mdao.find().get(i).getNome());
             }
-            
-            for(int i = 0; i < pacientes.length; i++){
-                cbPaciente.addItem(pdao.read().get(i).getNome()); 
+
+            for (int i = 0; i < pacientes.length; i++) {
+                cbPaciente.addItem(pdao.find().get(i).getNome());
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Não existe pacientes ou médicos para serem cadastrados.");
             btSalvar.setEnabled(false);
         }
-        
-        
+
         DefaultComboBoxModel medicoModel = (DefaultComboBoxModel) cbMedico.getModel();
         DefaultComboBoxModel pacienteModel = (DefaultComboBoxModel) cbPaciente.getModel();
-        
+
         cbMedico.setModel(medicoModel);
         cbPaciente.setModel(pacienteModel);
-        
+
     }
 
     /**
@@ -171,6 +185,11 @@ public class AdicionaConsulta extends javax.swing.JFrame {
         cbMinuto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
 
         cbMedico.setToolTipText("Selecione o medico");
+        cbMedico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMedicoActionPerformed(evt);
+            }
+        });
 
         cbPaciente.setToolTipText("Selecione o paciente");
 
@@ -310,33 +329,47 @@ public class AdicionaConsulta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
-        Consulta consulta = new Consulta();
-        ConsultaDao dao = new ConsultaDao();
-        
-        consulta.setData((String)cbDia.getSelectedItem()+"/"+(String)cbMes.getSelectedItem()+"/"+(String)cbAno.getSelectedItem());
-        consulta.setHora((String)cbHora.getSelectedItem()+":"+(String)cbMinuto.getSelectedItem());
-        consulta.setMedico((String)cbMedico.getSelectedItem());
-        consulta.setPaciente((String)cbPaciente.getSelectedItem());
-        
-        
-        int confirmacao = JOptionPane.showConfirmDialog(this,
-                "Confirma a consulta?\nData: "+consulta.getData()+
-                        "\nHora: "+consulta.getHora()+
-                        "\nMedico: "+consulta.getMedico()+
-                        "\nPaciente: "+consulta.getPaciente(),
-                "Confirma consulta",
-                JOptionPane.YES_NO_OPTION);
-        
-        if(confirmacao == 0){
-            dao.create(consulta);
-        
-            int opt = JOptionPane.showConfirmDialog(this, "Adicionar mais uma Consulta?","Consulta Adicionada", JOptionPane.YES_NO_OPTION);
-            if(opt == 1){
-                this.dispose();
-                    new DashBoard().setVisible(true);
+        consulta = new Consulta();
+        cdao = new ConsultaDao();
+        medico = new Medico();
+        paciente = new Paciente();
+
+        consulta.setData((String) cbDia.getSelectedItem() + "/" + (String) cbMes.getSelectedItem() + "/" + (String) cbAno.getSelectedItem());
+        consulta.setHora((String) cbHora.getSelectedItem() + ":" + (String) cbMinuto.getSelectedItem());
+
+        for(int i = 0; i < mlist.size(); i++){
+            if(mlist.get(i).getNome().equalsIgnoreCase((String) cbMedico.getSelectedItem())){
+                medico = mlist.get(i);
             }
         }
         
+        for(int i = 0; i < plist.size(); i++){
+            if(plist.get(i).getNome().equalsIgnoreCase((String) cbPaciente.getSelectedItem())){
+                paciente = plist.get(i);
+            }
+        }
+        
+        consulta.setMedicoId(medico.getId());
+        consulta.setPacienteId(paciente.getId());
+
+        int confirmacao = JOptionPane.showConfirmDialog(this,
+                "Confirma a consulta?\nData: " + consulta.getData()
+                + "\nHora: " + consulta.getHora()
+                + "\nMedico: " + medico.getNome()
+                + "\nPaciente: " + paciente.getNome(),
+                "Confirma consulta",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmacao == 0) {
+            cdao.insert(consulta);
+
+            int opt = JOptionPane.showConfirmDialog(this, "Adicionar mais uma Consulta?", "Consulta Adicionada", JOptionPane.YES_NO_OPTION);
+            if (opt == 1) {
+                this.dispose();
+                new DashBoard().setVisible(true);
+            }
+        }
+
     }//GEN-LAST:event_btSalvarActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -353,10 +386,13 @@ public class AdicionaConsulta extends javax.swing.JFrame {
         new Menssagem().sobre();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void cbMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMedicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbMedicoActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSalvar;

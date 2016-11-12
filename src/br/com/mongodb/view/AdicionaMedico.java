@@ -202,7 +202,7 @@ public class AdicionaMedico extends javax.swing.JFrame {
         if((medico.getNome().equalsIgnoreCase(""))){
             JOptionPane.showMessageDialog(null, "Digite o nome do Medico!");
         }else{
-            dao.create(medico);
+            dao.insert(medico);
             JOptionPane.showMessageDialog(null, "Medico adicionado com sucesso!");
             int opt = JOptionPane.showConfirmDialog(this, "Adicionar mais um Médico?","Medico Adicionado", JOptionPane.YES_NO_OPTION);
             if(opt == 1){
