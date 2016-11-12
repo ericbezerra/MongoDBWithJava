@@ -20,12 +20,13 @@ public class ConsultaDao {
 
     public ConsultaDao() {
         connection = new ConnectionMDB("Sistema");
+        collection = connection.getDb().getCollection("consulta");
         query = new BasicDBObject();
     }
 
     public void insert(Consulta consulta) {
         this.consulta = consulta;
-        collection = connection.getDb().getCollection("consulta");
+        
         query.put("data", consulta.getData());
         query.put("hora", consulta.getHora());
         query.put("medicoid", consulta.getMedicoId());
@@ -35,7 +36,6 @@ public class ConsultaDao {
 
     public ArrayList<Consulta> find() {
         ArrayList<Consulta> list = new ArrayList<>();
-        collection = connection.getDb().getCollection("consulta");
         DBCursor cursor = collection.find();
         while (cursor.hasNext()) {
             BasicDBObject consultas = (BasicDBObject) cursor.next();
@@ -69,6 +69,8 @@ public class ConsultaDao {
         this.consulta = consulta;
         query.put("data", consulta.getData());
         query.append("hora", consulta.getHora());
+        query.append("medicoid", consulta.getMedicoId());
+        query.append("pacienteid", consulta.getPacienteId());
         collection.remove(query);
         
     }

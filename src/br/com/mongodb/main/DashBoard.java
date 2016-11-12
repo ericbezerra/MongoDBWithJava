@@ -13,9 +13,12 @@ import br.com.mongodb.dao.ConsultaDao;
 import br.com.mongodb.dao.MedicoDao;
 import br.com.mongodb.dao.PacienteDao;
 import br.com.mongodb.model.Consulta;
+import br.com.mongodb.model.Medico;
+import br.com.mongodb.model.Paciente;
 import br.com.mongodb.view.EditaConsulta;
 import br.com.mongodb.view.EditaMedico;
 import br.com.mongodb.view.EditaPaciente;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -413,7 +416,6 @@ public final class DashBoard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.out.println("Nova Consulta");
         
         new AdicionaConsulta().setVisible(true);
         dispose();
@@ -431,24 +433,63 @@ public final class DashBoard extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Selecione uma consulta para editar");
         }
 
-        System.out.println("Editar Consulta");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Consulta c = new Consulta();
         ConsultaDao cdao = new ConsultaDao();
         
-        c.setData(tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 0).toString());
-        c.setHora(tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 1).toString());
+        MedicoDao mdao = new MedicoDao();
+        Medico medico = new Medico();
+        ArrayList<Medico> ml;
+        ml = mdao.find();
         
-        System.out.println(c);
-        cdao.delete(c);
-        System.out.println("Excluir Consulta");
+        PacienteDao pdao = new PacienteDao();
+        Paciente paciente = new Paciente();
+        ArrayList<Paciente> pl;
+        pl = pdao.find();
+        
+        String data = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 0).toString();
+        String hora = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 1).toString();
+        String m = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 2).toString();
+        String p = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 3).toString();
+        
+        for(int i = 0; i < ml.size(); i++){
+            if(ml.get(i).getNome().equalsIgnoreCase(m)){
+                medico = ml.get(i);
+            }
+        }
+        for(int i = 0; i < pl.size(); i++){
+            if(pl.get(i).getNome().equalsIgnoreCase(p)){
+                paciente = pl.get(i);
+            }
+        }
+        
+        c.setData(data);
+        c.setHora(hora);
+        c.setMedicoId(medico.getId());
+        c.setPacienteId(paciente.getId());
+        
+        dispose();
+        
+        int opt = JOptionPane.showConfirmDialog(this, "Confirma exclusão da consulta?\nConsulta:\nData: " +data
+                 +"\nHora: "+hora
+                 +"\nPaciente: "+p
+                 +"\nMedico: "+m, "Exclusão de consulta", JOptionPane.YES_NO_OPTION);
+        
+        if(opt == 0){
+            cdao.delete(c);
+            
+            new DashBoard().setVisible(true);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        System.out.println("Novo Paciente");
+    public void excluirConsulta(){
         
+    }
+    
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+
         new AdicionaPaciente().setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton4ActionPerformed

@@ -69,7 +69,6 @@ public class MedicoDao {
         this.medico = medico;
         query.put("nome", medico.getNome());
         query.append("especialidade", medico.getEspecialidade());
-        System.out.println(medico);
         collection.remove(query);
     }
 
