@@ -5,7 +5,6 @@ import br.com.mongodb.dao.PacienteDao;
 import br.com.mongodb.model.Consulta;
 import br.com.mongodb.model.Medico;
 import br.com.mongodb.model.Paciente;
-import java.util.ArrayList;
 
 public class Main {
 
@@ -17,20 +16,14 @@ public class Main {
     static ConsultaDao cdao;
 
     public static void main(String[] args) {
-        p = new Paciente();
-        ArrayList<Paciente> pl;
-        m = new Medico();
-        ArrayList<Medico> ml;
-        pdao = new PacienteDao();
         mdao = new MedicoDao();
-        
-        ml = mdao.find();
-        
-        for(int i = 0; i < ml.size(); i++){
-            if(ml.get(i).getNome().equalsIgnoreCase("Mauricio de Souza")){
-                m = ml.get(i);
-            }
-        }
-        System.out.println(m.getId());
+        String medico = "Mauricio de Souza";
+       for(int i = 0; i < mdao.find().size(); i++){
+           if(mdao.find().get(i).getNome().equalsIgnoreCase("Mauricio de Souza")){
+               System.out.println(mdao.find().get(i).getId());
+           }
+           
+       }
+       //58272ee13fc0701bec2fae5b
     }
 }

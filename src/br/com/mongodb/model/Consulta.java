@@ -11,8 +11,7 @@ public class Consulta {
     public Consulta() {
     }
 
-    public Consulta(String id, String data, String hora, String medico, String paciente) {
-        this.id = id;
+    public Consulta(String data, String hora, String medico, String paciente) {
         this.data = data;
         this.hora = hora;
         this.medicoId = medico;

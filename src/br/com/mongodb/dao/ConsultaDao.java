@@ -51,9 +51,13 @@ public class ConsultaDao {
         return list;
     }
 
-    public void update(Consulta consulta, Consulta consultaNew) {
-        this.consulta = consulta;
+    public void update(Consulta consultaOld, Consulta consultaNew) {
+        this.consulta = consultaOld;
         query.put("hora", consulta.getHora());
+        query.append("data", consulta.getData());
+        query.append("medicoid", consulta.getMedicoId());
+        query.append("pacienteid", consulta.getPacienteId());
+        
 
         BasicDBObject queryNew = new BasicDBObject();
         queryNew.put("$set", new BasicDBObject()

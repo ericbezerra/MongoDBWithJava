@@ -18,10 +18,13 @@ import javax.swing.JOptionPane;
  * @author erics
  */
 public class EditaMedico extends javax.swing.JFrame {
+
     private Medico oldM;
     private Medico newM;
+
     /**
      * Creates new form EditaMedico
+     *
      * @param nome
      * @param especialidade
      */
@@ -30,14 +33,14 @@ public class EditaMedico extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         System.out.println(nome);
         System.out.println(especialidade);
-        
+
         oldM = new Medico(nome, especialidade);
-        
+
         tfMedico.setText(nome);
-        
+
         ComboBoxModel<String> model = cbEspecialidade.getModel();
         model.setSelectedItem(especialidade);
-        
+
     }
 
     /**
@@ -209,21 +212,21 @@ public class EditaMedico extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         MedicoDao dao = new MedicoDao();
-        
+
         String nome = tfMedico.getText();
-        String especialidade = cbEspecialidade.getSelectedItem().toString(); 
+        String especialidade = cbEspecialidade.getSelectedItem().toString();
         newM = new Medico(nome, especialidade);
-        
+
         System.out.println(oldM);
         System.out.println(newM);
-        
-        int opt = JOptionPane.showConfirmDialog(this,"Confirma atualização do medico?\nAnterior:\nNome: "+oldM.getNome()
-                        +"\nEspecialidade: "+oldM.getEspecialidade()+
-                        "\n\nApos atualizaçao: \nNome: "+newM.getNome()
-                        +"\nEspecialidade: "+newM.getEspecialidade(),
+
+        int opt = JOptionPane.showConfirmDialog(this, "Confirma atualização do medico?\nAnterior:\nNome: " + oldM.getNome()
+                + "\nEspecialidade: " + oldM.getEspecialidade()
+                + "\n\nApos atualizaçao: \nNome: " + newM.getNome()
+                + "\nEspecialidade: " + newM.getEspecialidade(),
                 "Atualização de medico", JOptionPane.YES_NO_OPTION);
-        
-        if(opt == 0){
+
+        if (opt == 0) {
             dao.update(oldM, newM);
             dispose();
             new DashBoard().setVisible(true);

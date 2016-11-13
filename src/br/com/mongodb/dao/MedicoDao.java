@@ -1,6 +1,5 @@
 package br.com.mongodb.dao;
 
-import br.com.mongodb.model.Consulta;
 import java.util.ArrayList;
 
 import com.mongodb.BasicDBObject;
