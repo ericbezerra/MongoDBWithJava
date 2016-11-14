@@ -194,7 +194,7 @@ public final class DashBoard extends javax.swing.JFrame {
         jpConsultasLayout.setHorizontalGroup(
             jpConsultasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpConsultasLayout.createSequentialGroup()
-                .addContainerGap(82, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,7 +262,7 @@ public final class DashBoard extends javax.swing.JFrame {
             jpPacientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPacientesLayout.createSequentialGroup()
-                .addContainerGap(83, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -327,7 +327,7 @@ public final class DashBoard extends javax.swing.JFrame {
         jpMedicos.setLayout(jpMedicosLayout);
         jpMedicosLayout.setHorizontalGroup(
             jpMedicosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jScrollPane3)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMedicosLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,8 +362,8 @@ public final class DashBoard extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(111, 111, 111)
                 .addComponent(jLabel1)
-                .addContainerGap(89, Short.MAX_VALUE))
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,6 +554,8 @@ public final class DashBoard extends javax.swing.JFrame {
                         pdao.delete(paciente);
                         JOptionPane.showMessageDialog(null, "Paciente e Consultas relacionadas excluidos com sucesso.");
                         new DashBoard().setVisible(true);
+                    }else{
+                        new DashBoard().setVisible(true);
                     }
                 //caso não tenha consultas exclui o paciente e volta para a dashboard
                 } else {
@@ -636,6 +638,9 @@ public final class DashBoard extends javax.swing.JFrame {
                         }
                         mdao.delete(medico);
                         JOptionPane.showMessageDialog(null, "Medico e Consultas relacionadas excluidos com sucesso.");
+                        new DashBoard().setVisible(true);
+                    //caso não volta para dashboard
+                    }else{
                         new DashBoard().setVisible(true);
                     }
                 //caso não tenha consultas exclui o paciente e volta para a dashboard
