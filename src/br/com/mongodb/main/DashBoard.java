@@ -22,13 +22,15 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
 /**
  *
  * @author eric.bezerra
  */
 public final class DashBoard extends javax.swing.JFrame {
+
     DefaultTableModel modelo;
+    private int confirmacao;
+
     /**
      * Creates new form DashBoard
      */
@@ -40,73 +42,73 @@ public final class DashBoard extends javax.swing.JFrame {
         populaTabelaPaciente();
         populaTabelaMedico();
     }
-    
-    public void populaTabelaConsulta(){
+
+    public void populaTabelaConsulta() {
         ConsultaDao cdao = new ConsultaDao();
         MedicoDao mdao = new MedicoDao();
         PacienteDao pdao = new PacienteDao();
-        
-        Object [] consultaColuna = 
-            {"Data","Hora", "Medico", "Paciente", "Excluir", "Alterar"};
-        
+
+        Object[] consultaColuna
+                = {"Data", "Hora", "Medico", "Paciente", "Excluir", "Alterar"};
+
         int colums = consultaColuna.length;
         int rows = cdao.find().size();
-        
+
         Object[][] dados = new Object[rows][colums];
-        
-        for(int i = 0; i < rows; i++){ 
+
+        for (int i = 0; i < rows; i++) {
             dados[i][0] = cdao.find().get(i).getData();
             dados[i][1] = cdao.find().get(i).getHora();
             dados[i][2] = mdao.findDocumentById(cdao.find().get(i).getMedicoId()).getNome();
             dados[i][3] = pdao.findDocumentById(cdao.find().get(i).getPacienteId()).getNome();
         }
-        modelo = (DefaultTableModel)tabelaConsulta.getModel();
-        
-        for(int i = 0; i < dados.length; i++){
+        modelo = (DefaultTableModel) tabelaConsulta.getModel();
+
+        for (int i = 0; i < dados.length; i++) {
             modelo.insertRow(modelo.getRowCount(), dados[i]);
         }
     }
-    
-    public void populaTabelaPaciente(){
-        PacienteDao pd = new PacienteDao();  
-        Object [] pacienteColuna = 
-            {"Nome","Sexo", "Idade"};
+
+    public void populaTabelaPaciente() {
+        PacienteDao pd = new PacienteDao();
+        Object[] pacienteColuna
+                = {"Nome", "Sexo", "Idade"};
         int colums = pacienteColuna.length;
         int rows = pd.find().size();
-         Object[][] dados = new Object[rows][colums];
-        
-        for(int i = 0; i < rows; i++){ 
+        Object[][] dados = new Object[rows][colums];
+
+        for (int i = 0; i < rows; i++) {
             dados[i][0] = pd.find().get(i).getNome();
             dados[i][1] = pd.find().get(i).getSexo();
             dados[i][2] = pd.find().get(i).getIdade();
         }
-        modelo = (DefaultTableModel)tabelaPaciente.getModel();
-        
-        for(int i = 0; i < dados.length; i++){
+        modelo = (DefaultTableModel) tabelaPaciente.getModel();
+
+        for (int i = 0; i < dados.length; i++) {
             modelo.insertRow(modelo.getRowCount(), dados[i]);
         }
     }
-    
-    public void populaTabelaMedico(){
+
+    public void populaTabelaMedico() {
         MedicoDao md = new MedicoDao();
-        Object [] medicoColuna = 
-            {"Nome","Especialidade"};
+        Object[] medicoColuna
+                = {"Nome", "Especialidade"};
         int colums = medicoColuna.length;
         int rows = md.find().size();
         Object[][] dados = new Object[rows][colums];
-        
-        for(int i = 0; i < rows; i++){
+
+        for (int i = 0; i < rows; i++) {
             dados[i][0] = md.find().get(i).getNome();
             dados[i][1] = md.find().get(i).getEspecialidade();
         }
-        
-        modelo = (DefaultTableModel)tabelaMedico.getModel();
-        
-        for(int i = 0; i < dados.length; i++){
+
+        modelo = (DefaultTableModel) tabelaMedico.getModel();
+
+        for (int i = 0; i < dados.length; i++) {
             modelo.insertRow(modelo.getRowCount(), dados[i]);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -414,20 +416,20 @@ public final class DashBoard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+
         new AdicionaConsulta().setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if(tabelaConsulta.getSelectedRow() != -1){
+        if (tabelaConsulta.getSelectedRow() != -1) {
             String data = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 0).toString();
-            String hora =  tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 1).toString();
-            String medico =  tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 2).toString();
-            String paciente =  tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 3).toString();
+            String hora = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 1).toString();
+            String medico = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 2).toString();
+            String paciente = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 3).toString();
             new EditaConsulta(data, hora, medico, paciente).setVisible(true);
             dispose();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Selecione uma consulta para editar");
         }
 
@@ -436,56 +438,52 @@ public final class DashBoard extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Consulta c = new Consulta();
         ConsultaDao cdao = new ConsultaDao();
-        
+
         MedicoDao mdao = new MedicoDao();
         Medico medico = new Medico();
         ArrayList<Medico> ml;
         ml = mdao.find();
-        
+
         PacienteDao pdao = new PacienteDao();
         Paciente paciente = new Paciente();
         ArrayList<Paciente> pl;
         pl = pdao.find();
-        
+
         String data = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 0).toString();
         String hora = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 1).toString();
         String m = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 2).toString();
         String p = tabelaConsulta.getValueAt(tabelaConsulta.getSelectedRow(), 3).toString();
-        
-        for(int i = 0; i < ml.size(); i++){
-            if(ml.get(i).getNome().equalsIgnoreCase(m)){
+
+        for (int i = 0; i < ml.size(); i++) {
+            if (ml.get(i).getNome().equalsIgnoreCase(m)) {
                 medico = ml.get(i);
             }
         }
-        for(int i = 0; i < pl.size(); i++){
-            if(pl.get(i).getNome().equalsIgnoreCase(p)){
+        for (int i = 0; i < pl.size(); i++) {
+            if (pl.get(i).getNome().equalsIgnoreCase(p)) {
                 paciente = pl.get(i);
             }
         }
-        
+
         c.setData(data);
         c.setHora(hora);
         c.setMedicoId(medico.getId());
         c.setPacienteId(paciente.getId());
-        
+
         dispose();
-        
-        int opt = JOptionPane.showConfirmDialog(this, "Confirma exclusão da consulta?\nConsulta:\nData: " +data
-                 +"\nHora: "+hora
-                 +"\nPaciente: "+p
-                 +"\nMedico: "+m, "Exclusão de consulta", JOptionPane.YES_NO_OPTION);
-        
-        if(opt == 0){
+
+        int opt = JOptionPane.showConfirmDialog(this, "Confirma exclusão da consulta?\nConsulta:\nData: " + data
+                + "\nHora: " + hora
+                + "\nPaciente: " + p
+                + "\nMedico: " + m, "Exclusão de consulta", JOptionPane.YES_NO_OPTION);
+
+        if (opt == 0) {
             cdao.delete(c);
-            
             new DashBoard().setVisible(true);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    public void excluirConsulta(){
-        
-    }
-    
+
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 
         new AdicionaPaciente().setVisible(true);
@@ -493,39 +491,100 @@ public final class DashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        if(tabelaPaciente.getSelectedRow() != -1){
+        if (tabelaPaciente.getSelectedRow() != -1) {
             String nome = tabelaPaciente.getValueAt(tabelaPaciente.getSelectedRow(), 0).toString();
-            String sexo =  tabelaPaciente.getValueAt(tabelaPaciente.getSelectedRow(), 1).toString();
-            String idade =  tabelaPaciente.getValueAt(tabelaPaciente.getSelectedRow(), 2).toString();
-            
+            String sexo = tabelaPaciente.getValueAt(tabelaPaciente.getSelectedRow(), 1).toString();
+            String idade = tabelaPaciente.getValueAt(tabelaPaciente.getSelectedRow(), 2).toString();
+
             new EditaPaciente(nome, sexo, idade).setVisible(true);
             dispose();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Selecione um Paciente para editar");
         }
-        
+
         System.out.println("Editar Paciente");
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if (tabelaPaciente.getSelectedRow() != -1) {
+            String nome = tabelaPaciente.getValueAt(tabelaPaciente.getSelectedRow(), 0).toString();
+            String sexo = tabelaPaciente.getValueAt(tabelaPaciente.getSelectedRow(), 1).toString();
+            String idade = tabelaPaciente.getValueAt(tabelaPaciente.getSelectedRow(), 2).toString();
+            String id = null;
+
+            Paciente paciente = new Paciente(nome, sexo, Integer.parseInt(idade));
+            PacienteDao pdao = new PacienteDao();
+
+            for (int i = 0; i < pdao.find().size(); i++) {
+                String fnome = pdao.find().get(i).getNome();
+                String fsexo = pdao.find().get(i).getSexo();
+                int fidade = pdao.find().get(i).getIdade();
+
+                if ((fnome.equalsIgnoreCase(nome)) && (fsexo.equalsIgnoreCase(sexo)) && (fidade == Integer.parseInt(idade))) {
+                    id = pdao.find().get(i).getId();
+                }
+            }
+            ConsultaDao cdao = new ConsultaDao();
+            ArrayList<Consulta> list = new ArrayList<>();
+            dispose();
+            int opt = JOptionPane.showConfirmDialog(this,
+                    "Confirma exclusão do Paciente?\nNome: " + nome
+                    + "\nSexo: " + sexo
+                    + "\nIdade: " + idade,
+                    "Exclusão do Paciente", JOptionPane.YES_NO_OPTION);
+
+            if (opt == 0) {
+                //verifica se tem consultas relacionadas como paciente
+                for (int i = 0; i < cdao.find().size(); i++) {
+                    if (cdao.find().get(i).getPacienteId().equalsIgnoreCase(id)) {
+                        list.add(cdao.find().get(i));
+                    }
+                }
+                //caso possua consulta pergunta se deseja excluir as consultas tambem
+                if (list.size() > 0) {
+                    confirmacao = JOptionPane.showConfirmDialog(this, "Esse paciente possui "
+                            + list.size() + " consulta(s).\nDeseja realmente excluilo?"
+                            + "\nIsso removerá todas as consultas relacionadas a ele.",
+                            "Exclusão do Paciente", JOptionPane.YES_NO_OPTION);
+                    //caso sim exclui todas as consultas relacionadas e o paciente tabem
+                    if ((confirmacao == 0)) {
+                        for (int i = 0; i < list.size(); i++) {
+                            cdao.delete(list.get(i));
+                        }
+                        pdao.delete(paciente);
+                        JOptionPane.showMessageDialog(null, "Paciente e Consultas relacionadas excluidos com sucesso.");
+                        new DashBoard().setVisible(true);
+                    }
+                //caso não tenha consultas exclui o paciente e volta para a dashboard
+                } else {
+                    pdao.delete(paciente);
+                    JOptionPane.showMessageDialog(null, "Paciente excluido com sucesso.");
+                    new DashBoard().setVisible(true);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um Paciente para excluir");
+        }
+
         System.out.println("Excluir Paciente");
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         System.out.println("Novo Medico");
-        
+
         new AdicionaMedico().setVisible(true);
         dispose();
+
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        if(tabelaMedico.getSelectedRow() != -1){
+        if (tabelaMedico.getSelectedRow() != -1) {
             String nome = tabelaMedico.getValueAt(tabelaMedico.getSelectedRow(), 0).toString();
-            String especialidade =  tabelaMedico.getValueAt(tabelaMedico.getSelectedRow(), 1).toString();
-            
+            String especialidade = tabelaMedico.getValueAt(tabelaMedico.getSelectedRow(), 1).toString();
+
             new EditaMedico(nome, especialidade).setVisible(true);
             dispose();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Selecione um Medico para editar");
         }
 
@@ -533,6 +592,63 @@ public final class DashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        if (tabelaMedico.getSelectedRow() != -1) {
+            String nome = tabelaMedico.getValueAt(tabelaMedico.getSelectedRow(), 0).toString();
+            String especialidade = tabelaMedico.getValueAt(tabelaMedico.getSelectedRow(), 1).toString();
+            String id = null;
+
+            Medico medico = new Medico(nome, especialidade);
+            MedicoDao mdao = new MedicoDao();
+
+            for (int i = 0; i < mdao.find().size(); i++) {
+                String fnome = mdao.find().get(i).getNome();
+                String fespecialidade = mdao.find().get(i).getEspecialidade();
+
+                if ((fnome.equalsIgnoreCase(nome)) && (fespecialidade.equalsIgnoreCase(especialidade))) {
+                    id = mdao.find().get(i).getId();
+                }
+            }
+            ConsultaDao cdao = new ConsultaDao();
+            ArrayList<Consulta> list = new ArrayList<>();
+            dispose();
+            int opt = JOptionPane.showConfirmDialog(this,
+                    "Confirma exclusão do Medico?\nNome: " + nome
+                    + "\nEspecialidade: " + especialidade,
+                    "Exclusão do Medico", JOptionPane.YES_NO_OPTION);
+
+            if (opt == 0) {
+                //verifica se tem consultas relacionadas como medico
+                for (int i = 0; i < cdao.find().size(); i++) {
+                    if (cdao.find().get(i).getMedicoId().equalsIgnoreCase(id)) {
+                        list.add(cdao.find().get(i));
+                    }
+                }
+                //caso possua consulta pergunta se deseja excluir as consultas tambem
+                if (list.size() > 0) {
+                    confirmacao = JOptionPane.showConfirmDialog(this, "Esse medico possui "
+                            + list.size() + " consulta(s).\nDeseja realmente excluilo?"
+                            + "\nIsso removerá todas as consultas relacionadas a ele.",
+                            "Exclusão do Medico", JOptionPane.YES_NO_OPTION);
+                    //caso sim exclui todas as consultas relacionadas e o paciente tabem
+                    if ((confirmacao == 0)) {
+                        for (int i = 0; i < list.size(); i++) {
+                            cdao.delete(list.get(i));
+                        }
+                        mdao.delete(medico);
+                        JOptionPane.showMessageDialog(null, "Medico e Consultas relacionadas excluidos com sucesso.");
+                        new DashBoard().setVisible(true);
+                    }
+                //caso não tenha consultas exclui o paciente e volta para a dashboard
+                } else {
+                    mdao.delete(medico);
+                    JOptionPane.showMessageDialog(null, "Medico excluido com sucesso.");
+                    new DashBoard().setVisible(true);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um Medico para excluir");
+        }
+
         System.out.println("Excluir Medico");
     }//GEN-LAST:event_jButton9ActionPerformed
 

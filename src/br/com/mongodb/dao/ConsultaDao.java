@@ -47,7 +47,6 @@ public class ConsultaDao {
             c.setPacienteId(consultas.getString("pacienteid"));
             list.add(c);
         }
-
         return list;
     }
 
@@ -76,7 +75,6 @@ public class ConsultaDao {
         query.append("medicoid", consulta.getMedicoId());
         query.append("pacienteid", consulta.getPacienteId());
         collection.remove(query);
-        
     }
 
     //##  Lista pelo id do banco  ##//
@@ -89,7 +87,6 @@ public class ConsultaDao {
 
         Gson gson = new Gson();
         consulta = gson.fromJson(dbObj.toString(), Consulta.class);
-
         return consulta;
     }
 
